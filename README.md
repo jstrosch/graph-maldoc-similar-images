@@ -1,6 +1,10 @@
 # Graph Similar Maldoc Images
  A script that extracts embedded images from [Office Open XML (OOXML)](https://en.wikipedia.org/wiki/Office_Open_XML) documents and generates image hash similarity graphs that cluster visually similar images together. The script computes the [Average Hash](http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html) of each extracted image, then graphs the images if they meet the similarity threshold. The script can be used as a technique for visually identifying malware campaigns involving documents. To use the script, supply a directory containing OOXML files. If LibreOffice is in your PATH you can optionally convert non-OOXML Word, Excel, PowerPoint and Rich Text File documents to OOXML. The script outputs DOT files that can be exported as images using Graphviz. If Graphviz is in your PATH you can also export to an SVG (preferred) or PNG image.
 
+## Application
+
+You can find regular posts with results of using this script at [https://github.com/jstrosch/malware-samples](https://github.com/jstrosch/malware-samples)
+
  ## Output 
  Example image hash similarity graph (cropped). Here each node is a unique image that is connected by edges to other images that met the similarity threshold:
 
