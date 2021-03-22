@@ -233,23 +233,24 @@ def calculate_image_distance(total_docs):
     for b in images_b:
         av_label = "NONE"
 
-        payload = {'md5_hash': str(b)}
+        payload = {'query':'get_info','hash': str(b)}
+        #print(payload)
+        url = 'https://mb-api.abuse.ch/api/v1/'
+        try:
+            r = requests.post(url, data=payload)
 
-        url = 'https://urlhaus-api.abuse.ch/v1/payload/'
+            #print(r.text)
 
-        r = requests.post(url, data=payload)
+            results = json.loads(r.text)
 
-        #print(r.text)
+            av_label = results["data"][0]["signature"]
 
-        results = json.loads(r.text)
-
-        av_label = results["signature"]
-
-        if not av_label is None:
-            rl_results[b] = av_label
-        else:
-            rl_results[b] = "NONE"
-    # END AV Lookup 
+            if not av_label is None:
+                rl_results[b] = av_label
+            else:
+                rl_results[b] = "NONE"
+        except:
+            pass
     
     for a in images_a:
         image_a_path = os.path.join(dir_image, a)
@@ -265,7 +266,6 @@ def calculate_image_distance(total_docs):
             for word in img_words:
                 if len(word) >= 6 and not word in tmp_ocr:
                     tmp_ocr.append(word)
-
             img_ocr[a] = tmp_ocr
         except:
             pass
