@@ -232,25 +232,25 @@ def calculate_image_distance(total_docs):
     # Tag lookup - Abuse.ch
     for b in images_b:
         av_label = "NONE"
-
-        payload = {'query':'get_info','hash': str(b)}
-        #print(payload)
-        url = 'https://mb-api.abuse.ch/api/v1/'
+        rl_results[b] = "NONE"
+        payload = {'md5_hash': str(b)}
+        url = 'https://urlhaus-api.abuse.ch/v1/payload/'
         try:
             r = requests.post(url, data=payload)
 
-            #print(r.text)
-
             results = json.loads(r.text)
 
-            av_label = results["data"][0]["signature"]
+            if results["query_status"] == "ok":
 
-            if not av_label is None:
-                rl_results[b] = av_label
-            else:
-                rl_results[b] = "NONE"
-        except:
+                av_label = results["signature"]
+
+                if not av_label is None:
+                    rl_results[b] = av_label
+                    
+        except Exception as e:
+            #print("[DEBUG] First hash " + e)
             pass
+
     
     for a in images_a:
         image_a_path = os.path.join(dir_image, a)
